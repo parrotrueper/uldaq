@@ -44,4 +44,10 @@ examples/*
 !examples/*.c
 !examples/*.h
 !examples/*.am
+doc-pak
+libuldaq-*
+description-pak
+*.deb
+
+
 

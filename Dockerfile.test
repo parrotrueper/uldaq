@@ -1,16 +1,16 @@
-FROM ubuntu:24.04
+FROM ubuntu:22.04
 
 # Copy the Debian package into the container
-COPY uldaq_1.2.1-1_amd64.deb /tmp/uldaq_1.2.1-1_amd64.deb
+COPY uldaq-ubuntu2204_1.2.1-1_amd64.deb /tmp/uldaq-ubuntu2204_1.2.1-1_amd64.deb
 
 # Install necessary tools for installation and verification
 RUN apt-get update && apt-get install -y \
     dpkg \
     pkg-config \
     && rm -rf /var/lib/apt/lists/* \
-    && dpkg -i /tmp/uldaq_1.2.1-1_amd64.deb \
+    && dpkg -i /tmp/uldaq-ubuntu2204_1.2.1-1_amd64.deb \
     && apt-get install -f -y \
-    && rm -f /tmp/uldaq_1.2.1-1_amd64.deb \
+    && rm -f /tmp/uldaq-ubuntu2204_1.2.1-1_amd64.deb \
 #
 # Verify installation (optional: check if libuldaq is available)
 && ldconfig && pkg-config --exists libuldaq && echo "libuldaq installed successfully" || echo "libuldaq not found"

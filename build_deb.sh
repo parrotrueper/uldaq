@@ -6,7 +6,7 @@ set -e  # Exit on any error
 
 IMAGE_NAME="uldaq-build"
 CONTAINER_NAME="uldaq-container"
-DEB_FILE="uldaq_1.2.1-1_amd64.deb"
+DEB_FILE="uldaq-ubuntu2204_1.2.1-1_amd64.deb"
 
 echo "Building Docker image..."
 docker build -t "${IMAGE_NAME}" .
@@ -19,6 +19,7 @@ echo "Running Docker container..."
 docker run -d --name "${CONTAINER_NAME}" -v "$(pwd)":/app "${IMAGE_NAME}" bash -c "while true; do sleep 30; done"
 
 echo "Configuring and building the project..."
+docker exec "${CONTAINER_NAME}" bash -c "cd /app && make distclean || make clean || true"
 docker exec "${CONTAINER_NAME}" bash -c "cd /app && ./configure"
 docker exec "${CONTAINER_NAME}" bash -c "cd /app && make"
 
@@ -30,7 +31,7 @@ echo "Creating necessary directories..."
 docker exec "${CONTAINER_NAME}" mkdir -p /usr/local/share/doc
 
 echo "Creating Debian package with checkinstall..."
-docker exec "${CONTAINER_NAME}" bash -c "cd /app && checkinstall --pkgname=uldaq --pkgversion=1.2.1 --default --nodoc"
+docker exec "${CONTAINER_NAME}" bash -c "cd /app && checkinstall --pkgname=uldaq-ubuntu2204 --pkgversion=1.2.1 --default --nodoc"
 
 echo "Copying .deb file out of container..."
 docker cp "${CONTAINER_NAME}":/app/"${DEB_FILE}" .
